@@ -1,0 +1,34 @@
+<ProxyEndpoint name="default">
+  <Flows>
+    <Flow name="default">
+      <Request>
+	    <!-- Generate request message for the Google Geocoding API -->
+	    <Step><Name>GenerateGeocodingRequest</Name></Step>
+	    <!-- Call the Google Geocoding API -->
+	    <Step><Name>ExecuteGeocodingRequest</Name></Step>
+	    <!-- Parse the response and set variables -->
+	    <Step><Name>ParseGeocodingResponse</Name></Step>
+	    <!-- Generate request message for the Google Elevation API -->
+	    <Step><Name>AssignElevationParameters</Name></Step>
+      </Request>
+      <Response>
+	    <!-- Parse the response message from the Elevation API -->
+	    <Step><Name>ParseElevationResponse</Name></Step>
+	    <!-- Generate the final JSON-formatted response with JavaScript -->
+	    <Step><Name>GenerateResponse</Name></Step>
+      </Response>
+    </Flow>
+  </Flows>
+
+  <HTTPProxyConnection>
+    <!-- Add a base path to the ProxyEndpoint for URI pattern matching-->
+    <BasePath>/policy-mashup-cookbook</BasePath>
+    <!-- Listen on both HTTP and HTTPS endpoints -->
+    <VirtualHost>default</VirtualHost>
+    <VirtualHost>secure</VirtualHost>
+  </HTTPProxyConnection>
+  <RouteRule name="default">
+    <!-- Connect ProxyEndpoint to named TargetEndpoint /targets/default.xml -->
+    <TargetEndpoint>default</TargetEndpoint>
+  </RouteRule>
+</ProxyEndpoint>
